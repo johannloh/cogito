@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cloze Passage Activity</title>
+  <style>
+    .container {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 2;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .corrected-answer {
+      color: red;
+      font-size: 0.8em;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="question">
+      Covering an <span>1</span> <input type="text" id="Q1"> of more than 17 million square kilometres, Russia is the largest country in the world.
+    </div>
+    <!-- ... rest of the questions ... -->
+    <button id="ansBtn" onclick="checkAns()">Submit Answers</button>
+    <button id="resetBtn" onclick="resetAns()">Reset</button>
+    <div id="scoreDisplay"></div>
+  </div>
+  <script>
+    const answers = {
+      Q1: ["area"],
+      // ... (include all questions and acceptable answers here)
+    };
+
+    function checkAns() {
+      let correct = 0;
+      for (const [key, value] of Object.entries(answers)) {
+        const inputField = document.getElementById(key);
+        const input = inputField.value.trim().toLowerCase();
+        if (value.includes(input)) {
+          inputField.style.backgroundColor = "#B8E0D2";
+          correct++;
+        } else {
+          inputField.style.backgroundColor = "#FFB3A7";
+          const correctAnswerSpan = document.createElement('span');
+          correctAnswerSpan.className = 'corrected-answer';
+          correctAnswerSpan.innerHTML = "✗ " + value[0];
+          inputField.parentNode.insertBefore(correctAnswerSpan, inputField.nextSibling);
+        }
+      }
+      document.getElementById("scoreDisplay").innerHTML = `You got ${correct} out of ${Object.keys(answers).length} correct.`;
+    }
+
+    function resetAns() {
+      for (const key of Object.keys(answers)) {
+        const inputField = document.getElementById(key);
+        inputField.value = '';
+        inputField.style.backgroundColor = "";
+        const nextSibling = inputField.nextSibling;
+        if (nextSibling && nextSibling.className === 'corrected-answer') {
+          nextSibling.remove();
+        }
+      }
+      document.getElementById("scoreDisplay").innerHTML = "";
+    }
+  </script>
+</body>
+</html>
